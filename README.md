@@ -1,19 +1,52 @@
 # iOS Signer CI
 
-This a free and simple builder implementation for [ios-signer-service](https://github.com/SignTools/ios-signer-service). It uses a Continous Integration (CI) service to pull, sign, and upload any iOS apps to the `ios-signer-service` that requested them.
+This is a free and simple builder for [ios-signer-service](https://github.com/SignTools/ios-signer-service). It uses a Continous Integration (CI) provider to pull, sign, and upload any iOS apps to your `ios-signer-service`.
 
-Configuration for the following providers is included:
+The following providers are supported:
 
-- GitHub Actions - [sign.yml](.github/workflows/sign.yml)
-- Semaphore CI - [semaphore.yml](.semaphore/semaphore.yml)
+- [GitHub Actions](https://docs.github.com/en/actions)
+- [Semaphore CI](https://semaphoreci.com/)
+
+You only need to configure one provider.
+
+> ### :warning: Developer accounts are only supported on GitHub Actions for now!
 
 ## Setup
 
-Fork this repo. If using a CI other than GitHub, set up the CI with the forked repo. Then, add the following secrets to your CI:
+1. Create a GitHub account
+2. Click on the `Use this template` button at the top of this page
+3. Give the new project a name and set the visibility to `Private`
+4. Create the new project
 
-| Secret     | Description                                            | Example                  |
-| ---------- | ------------------------------------------------------ | ------------------------ |
-| SECRET_URL | Your iOS Signer Service's base URL                     | https://website.com      |
-| SECRET_KEY | The workflow key configured in your iOS Signer Service | MY_SUPER_LONG_SECRET_KEY |
+Alternatively, you can also manually clone this repo into a new private repository.
 
-That is all. Make sure to set the correct workflow configuration in your `ios-signer-service` instance.
+You now need to configure a CI provider. You only need one of them:
+
+### GitHub Actions
+
+1. Open your GitHub [account settings](https://github.com/settings/profile)
+2. Go to `Developer settings` and then `Personal access tokens`
+3. Generate a new token with the `workflow` permission
+
+This is the token you need for your `ios-signer-service`'s builder configuration.
+
+### Semaphore CI
+
+1. Register for [SemaphoreCI](https://semaphoreci.com/) and create an organization
+2. At the top of the organization dashboard, click on `Create New`
+3. On the page that opens, press `Choose repository`
+4. Authorize SemaphoreCI's app to access your GitHub private repositories in order to see the builder you just created
+5. Back on SemaphoreCI's new project page, you will see your builder repository - click on it
+6. Proceed with `Continue to workflow setup`, then click `I will use the existing configuration`
+7. Go to `Manage Settings` of that repository
+8. At the bottom of the page that opens, set `What to build` to `Do not build this project (Pause project)`
+
+At your SemaphoreCI profile settings, you will find your `API Token`. This is the token you need for your `ios-signer-service`'s builder configuration.
+
+To get the project id, go to your project's page in SemaphoreCI and click `Project artifacts`. When the new page loads, look at the URL in your browser. It will be similar to this:
+
+```
+https://YOUR_ORG_NAME.semaphoreci.com/artifacts/projects/0c4071ec-a35f-4145-a5f9-08d25483c222
+```
+
+The id after the last forward slash is your project id.
